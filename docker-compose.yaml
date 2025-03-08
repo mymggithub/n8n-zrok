@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  zrok:
+    container_name: z8
+    image: kbinghamnetfoundry/zrok:main
+    volumes:
+      - ~/.zrok:/root/.zrok
+      - ./entrypoint.sh:/entrypoint.sh
+    environment:
+      - ZROK_TOKEN=${ZROK_TOKEN}
+    entrypoint: /entrypoint.sh
+    networks:
+      - n8n-network
+    stdin_open: true  # Keep STDIN open
+    tty: true         # Allocate a pseudo-TTY
+    restart: unless-stopped  # Ensure the container restarts automatically
+
+  n8n:
+    container_name: n8n_z
+    image: docker.n8n.io/n8nio/n8n
+    #user: root  # Run the container as root user: "1000:1000"
+    environment:
+      - WEBHOOK_URL=${WEBHOOK}
+      - N8N_SECURE_COOKIE=false
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
+    networks:
+      - n8n-network
+    volumes:
+      - n8n_data:/home/node/.n8n
+    ports:
+      - "5679:5678"
+    depends_on:
+      - zrok  # Ensure zrok starts first
+    restart: unless-stopped
+
+volumes:
+  n8n_data:
+
+networks:
+  n8n-network:
+    driver: bridge
