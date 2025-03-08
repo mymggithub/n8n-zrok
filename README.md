@@ -1,10 +1,10 @@
 # n8n-zrok
 
-first start zrok
+First start zrok
 ```
 docker compose up -d zrok
 ```
-you may want to make entrypoint.sh and update_env.sh executable 
+You may want to make entrypoint.sh and update_env.sh executable 
 
 ```
 chmod +x entrypoint.sh
