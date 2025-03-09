@@ -18,7 +18,8 @@ services:
 
   n8n:
     container_name: n8n_z
-    image: docker.n8n.io/n8nio/n8n
+    #image: docker.n8n.io/n8nio/n8n
+    build: .
     #user: root  # Run the container as root user: "1000:1000"
     environment:
       - WEBHOOK_URL=${WEBHOOK}
